@@ -14,8 +14,8 @@ ofile = open("dataset/setdesc.csv","w+")
 ofile.write("path,is_control,slope,noise,corrans\n")
 
 ## Tests
-slopes = [0.01,0.05,0.1]
-noises = [0.00,0.025,0.05,0.075,0.1,0.125,0.150,0.175,0.200,0.225,0.250,0.275,0.300]
+slopes = [0.02,0.04,0.06]
+noises = [0.00,0.03,0.09,0.12,0.15,0.18,0.21,0.24,0.27,0.30]
 repls = 2 # n positive, n negative
 
 label_cnt = 0
@@ -38,8 +38,8 @@ for slope in slopes:
 # 3. 0.5 slope with no noise
 # 3. 0.5 slope with 0.300 noise
 ctrl_slopes = [0.0,0.5]
-ctrl_noises = [0.0,0.30]
-ctrl_repls = 2
+ctrl_noises = [0.0]
+ctrl_repls = 4
 
 for slope in ctrl_slopes:
     for noise in ctrl_noises:
