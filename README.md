@@ -7,7 +7,7 @@ Scripts to generate data for NS201 psychometry curve experiment.
 
 Syntax: `python3 generate_plot.py <line_slope:float> <gaussian noise standard deviation:float> <path to output:string>`
 
-`generate_set.py`: Generates an entire set of data containing graphs generated with different values of slope and noise.
+`generate_set.py`: Generates an entire set of data containing graphs generated with different values of slope and noise. It also generates a file called setdesc.csv containing information each of the images in the dataset folder. 
 
 Syntax: `python3 generate_set.py`
 
