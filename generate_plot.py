@@ -1,15 +1,26 @@
 import matplotlib.pyplot as plt
 import sys
 import numpy as np
+from sklearn.linear_model import LinearRegression
 
 
-def generate(slope,noise_y_sd,path):
-    x_points = np.arange(0.0,2.0,0.025)
-    y_points = slope*x_points
-    y_noise = np.random.normal(0.0,noise_y_sd,80)
-    y_points = y_points+y_noise
+def generate(slope, noise_sd, path):
+    threshold = 0.00001
 
-    plt.scatter(x_points,y_points,marker=".")
+    # Generate a slope 0 line with y noise 
+    x_points = np.arange(0.0,2.0,0.01)
+    x_ = x_points.reshape((-1,1))
+
+    y_noise = np.random.normal(0.0,noise_sd,200) 
+    model = LinearRegression().fit(x_,y_noise)
+    
+    while abs(model.coef_)>threshold:
+        y_noise = np.random.normal(0.0,noise_sd,200) 
+        model = LinearRegression().fit(x_,y_noise)
+
+    print(model.coef_)
+        
+    plt.scatter(x_points,x_points*slope+y_noise,marker=".")
     plt.axis('equal')
     plt.xlim(-0.1,2.1)
     plt.gca().axes.get_xaxis().set_visible(False)

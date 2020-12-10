@@ -1,9 +1,10 @@
 import os
 from generate_plot import *
+import shutil
 
 # Remove previous dataset directory
 if os.path.exists('dataset'):
-    os.rmdir('dataset')
+    shutil.rmtree('dataset')
 
 # create new dataset directory
 if not os.path.exists('dataset'):
@@ -18,6 +19,8 @@ slopes = [0.02,0.04,0.06]
 noises = [0.00,0.03,0.09,0.12,0.15,0.18,0.21,0.24,0.27,0.30]
 repls = 2 # n positive, n negative
 
+total_images = len(slopes)*len(noises)*repls*2
+
 label_cnt = 0
 
 for slope in slopes:
@@ -27,6 +30,7 @@ for slope in slopes:
                 generate(repl_type*slope,noise,"dataset/"+str(label_cnt)+".png")
                 corrans = "up" if repl_type>0.0 else "down"
                 ofile.write("dataset/%d.png,false,%f,%f,%s\n" % (label_cnt,repl_type*slope,noise,corrans))
+                print("Generated %d of %d non_controls" % (label_cnt,total_images))
                 label_cnt += 1
             
 

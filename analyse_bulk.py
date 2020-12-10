@@ -13,22 +13,29 @@ ofile1.write("exp_code,img_label,slope,noise,correct\n")
 slopes = []
 noises = []
 
+
 for fname in glob.glob(folder+"/*.csv"):
     exp_code = fname.split("/")[-1].split(".")[0]
     with open(fname) as ifile:
-        next(ifile)
-        next(ifile) # Skip first two lines
+        header = next(ifile) # Skip first two lines
+        header_words = header.split(",")
+        is_control_col = header_words.index("is_control") 
+        img_path_col = header_words.index("path")
+        slope_col = header_words.index("slope")
+        noise_col = header_words.index("noise")
+        corrans_col = header_words.index("corrans")
+        resp_col = header_words.index("key_resp.keys")
         for line in ifile:
             words = line.split(",")
-            if words[1] == "False":
-                img_label = int(words[0].split("/")[-1].split(".")[0])
-                slope = float(words[2])
+            if words[is_control_col] == "false":
+                img_label = int(words[img_path_col].split("/")[-1].split(".")[0])
+                slope = float(words[slope_col])
                 if not abs(slope) in slopes:
                     slopes.append(abs(slope)) 
-                noise = float(words[3])
+                noise = float(words[noise_col])
                 if not noise in noises:
                     noises.append(noise)
-                correct = 1 if words[4]==words[27] else 0
+                correct = 1 if words[corrans_col]==words[resp_col] else 0
                 ofile1.write("%s,%d,%f,%f,%d\n" % (exp_code,img_label,slope,noise,correct))
 
 ofile1.close()
@@ -43,12 +50,18 @@ for fname in glob.glob(folder+"/*.csv"):
             num_correct = 0
             num_total = 0
             with open(fname) as ifile:
-                next(ifile)
-                next(ifile) # Skip first two lines
+                header = next(ifile) # Skip first two lines
+                header_words = header.split(",")
+                is_control_col = header_words.index("is_control") 
+                img_path_col = header_words.index("path")
+                slope_col = header_words.index("slope")
+                noise_col = header_words.index("noise")
+                corrans_col = header_words.index("corrans")
+                resp_col = header_words.index("key_resp.keys")
                 for line in ifile:
                     words = line.split(",")
-                    if words[1] == "False" and abs(float(words[2]))==slope and float(words[3])==noise :
-                        is_correct = 1 if words[4]==words[27] else 0
+                    if words[is_control_col] == "false" and abs(float(words[slope_col]))==slope and float(words[noise_col])==noise :
+                        is_correct = 1 if words[corrans_col]==words[resp_col] else 0
                         num_correct += is_correct
                         num_total += 1
 
